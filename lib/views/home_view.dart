@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:diorite/views/new_card_view.dart';
 import 'package:flutter/services.dart';
 import 'package:diorite/components/char_card.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,12 @@ class _HomeViewState extends State<HomeView> {
 
   void _refreshCharacters() {
     setState(() {
+      // Método para recargar el las cartas
       _charactersFuture = _loadUserCharacters();
     });
   }
 
+  //Método asíncrono que carga los datos de los personajes desde un archivo json local
   Future<List<CharCard>> _loadUserCharacters() async {
     try {
       //Lee el archivo
@@ -39,8 +42,12 @@ class _HomeViewState extends State<HomeView> {
 
       if (jsonData.containsKey('characters') &&
           jsonData['characters'] is List) {
+        //Pasamos la lista de personajes desde el json
+        // hacia una lista iterable.
         List<dynamic> characterList = jsonData['characters'];
 
+        //Creamos una Clase CharCard por cada personaje en la lista
+        // y guardamos cada instancia en otra lista
         List<CharCard> cards = characterList.map((item) {
           return CharCard();
         }).toList();
@@ -66,10 +73,16 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewCardView()),
+          );
+        },
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<CharCard>>(
+        //Aquì empieza la magia
         future: _charactersFuture,
         builder:
             (BuildContext context, AsyncSnapshot<List<CharCard>> snapshot) {
@@ -153,7 +166,6 @@ class _HomeViewState extends State<HomeView> {
               }
               //si hay cartas, mostrarlas:
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(10),
                 child: Wrap(
                   spacing: 16,
                   runSpacing: 16,
