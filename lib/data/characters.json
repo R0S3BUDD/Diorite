@@ -1,6 +1,34 @@
 {
-    "placeholder": {
-        "name": "Placeholder Character",
-        "description": "This is a placeholder character."
-    }
+    "characters": [
+        {
+            "Name":"Placeholder 1"
+        },
+        {
+            "Name":"Placeholder 2"
+        },
+        {
+            "Name":"Placeholder 3"
+        },
+        {
+            "Name":"Placeholder 4"
+        },
+        {
+            "Name":"Placeholder 4"
+        },
+        {
+            "Name":"Placeholder 4"
+        },
+        {
+            "Name":"Placeholder 4"
+        },
+        {
+            "Name":"Placeholder 4"
+        },
+        {
+            "Name":"Placeholder 4"
+        },
+        {
+            "Name":"Placeholder 4"
+        }
+    ]
 }
