@@ -1,6 +1,5 @@
-import 'dart:convert';
+import 'package:diorite/core/local_storage_service.dart';
 import 'package:diorite/views/new_card_view.dart';
-import 'package:flutter/services.dart';
 import 'package:diorite/components/char_card.dart';
 import 'package:flutter/material.dart';
 
@@ -31,28 +30,17 @@ class _HomeViewState extends State<HomeView> {
   //Método asíncrono que carga los datos de los personajes desde un archivo json local
   Future<List<CharCard>> _loadUserCharacters() async {
     try {
-      //Lee el archivo
-      String content = await rootBundle.loadString('lib/data/characters.json');
+      List<dynamic> characters = await LocalStorageService().readData(
+        "characters.json",
+      );
 
-      //Si el contenido está vacío, retorna cadena vacía
-      if (content.isEmpty) return [];
-
-      //Entrega el contenido como map, clave valor String : lo que sea
-      Map<String, dynamic> jsonData = jsonDecode(content);
-
-      if (jsonData.containsKey('characters') &&
-          jsonData['characters'] is List) {
-        //Pasamos la lista de personajes desde el json
-        // hacia una lista iterable.
-        List<dynamic> characterList = jsonData['characters'];
-
-        //Creamos una Clase CharCard por cada personaje en la lista
-        // y guardamos cada instancia en otra lista
-        List<CharCard> cards = characterList.map((item) {
-          return CharCard();
-        }).toList();
-
-        return cards;
+      if (characters.isNotEmpty) {
+        List<CharCard> charactersList = characters
+            .map(
+              (item) => CharCard(info: item),
+            ) //Por cada item(map) dentro de la lista, retorna CharCard
+            .toList();
+        return charactersList;
       } else {
         return [];
       }
@@ -73,11 +61,21 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => NewCardView()),
           );
+
+          if (result) {
+            setState(() {
+              _refreshCharacters();
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Ups... Algo saliò mal.")),
+            );
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -170,9 +168,7 @@ class _HomeViewState extends State<HomeView> {
                   spacing: 16,
                   runSpacing: 16,
                   alignment: WrapAlignment.start,
-                  children: cards.map((card) {
-                    return CharCard();
-                  }).toList(),
+                  children: cards,
                 ),
               );
             },
