@@ -30,9 +30,8 @@ class _HomeViewState extends State<HomeView> {
   //Método asíncrono que carga los datos de los personajes desde un archivo json local
   Future<List<CharCard>> _loadUserCharacters() async {
     try {
-      List<dynamic> characters = await LocalStorageService().readData(
-        "characters.json",
-      );
+      List<Map<String, dynamic>> characters = await LocalStorageService()
+          .readData("characters.json");
 
       if (characters.isNotEmpty) {
         List<CharCard> charactersList = characters
@@ -62,19 +61,36 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await Navigator.push(
+          final result = await Navigator.push<SaveResult>(
             context,
-            MaterialPageRoute(builder: (context) => NewCardView()),
+            MaterialPageRoute(builder: (context) => const NewCardView()),
           );
 
-          if (result) {
-            setState(() {
+          if (!context.mounted) return;
+
+          switch (result) {
+            case SaveResult.success:
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text("¡Carta Guardada!")));
               _refreshCharacters();
-            });
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Ups... Algo saliò mal.")),
-            );
+              break;
+
+            case SaveResult.failure:
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Ups... Algo salió mal.")),
+              );
+              break;
+
+            case SaveResult.aborted:
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("¿Te arrepentiste? ;-;")),
+              );
+              break;
+
+            case null:
+              // Esto cubre el caso en que la ruta se cierra sin enviar nada
+              break;
           }
         },
         child: const Icon(Icons.add),
@@ -100,6 +116,7 @@ class _HomeViewState extends State<HomeView> {
 
               //Estado: Error
               if (snapshot.hasError) {
+                print(snapshot.error);
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +124,7 @@ class _HomeViewState extends State<HomeView> {
                       const Icon(
                         Icons.error_outline,
                         size: 48,
-                        color: Colors.red,
+                        color: Colors.blue,
                       ),
                       const SizedBox(height: 16),
                       Text(

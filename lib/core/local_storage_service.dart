@@ -52,7 +52,7 @@ class LocalStorageService {
     }
   }
 
-  Future<List<dynamic>> readData(String fileName) async {
+  Future<List<Map<String, dynamic>>> readData(String fileName) async {
     await init();
     final file = File(_getFilePath(fileName));
 
@@ -63,12 +63,16 @@ class LocalStorageService {
 
     final jsonString = await file.readAsString();
 
-    if (jsonString.isEmpty) return [];
+    if (jsonString.isEmpty) {
+      return [];
+    }
 
     try {
-      return jsonDecode(jsonString);
+      return (jsonDecode(jsonString) as List)
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
     } catch (e) {
-      //await file.writeAsString("[]");
+      await file.writeAsString("[]");
       print("ERROR AL LEER: $e");
       return [];
     }
