@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:diorite/components/main_photo_frame.dart';
 import 'package:diorite/components/text_area.dart';
+import 'package:diorite/core/image_picker_service.dart';
 import 'package:diorite/core/local_storage_service.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +27,21 @@ class _NewCardViewState extends State<NewCardView> {
   final TextEditingController _controladorHistoria = TextEditingController();
 
   final LocalStorageService _storage = LocalStorageService();
+  final ImagePickerService _imagePicker = ImagePickerService();
 
   bool _isSaving = false;
+  Future<File?>? _future;
+  File? imageFile;
+
+  Future<File?> futureFile() async {
+    try {
+      imageFile = await _imagePicker.pickImage();
+      return imageFile;
+    } catch (e) {
+      print("Error al elegir imagen: $e");
+      return null;
+    }
+  }
 
   @override
   void dispose() {
@@ -33,6 +50,7 @@ class _NewCardViewState extends State<NewCardView> {
     _controladorHistoria.dispose();
     _controladorNacionalidad.dispose();
     _controladorPersonalidad.dispose();
+    imageFile = null;
     super.dispose();
   }
 
@@ -50,6 +68,11 @@ class _NewCardViewState extends State<NewCardView> {
         'nacionalidad': _controladorNacionalidad.text.trim(),
         'personalidad': _controladorPersonalidad.text.trim(),
         'historia': _controladorHistoria.text.trim(),
+        'imagenPrincipal': imageFile?.path ?? "",
+        'miniaturaImagen': imageFile != null
+            ? await _storage.createThumbnail(imageFile!)
+            : "",
+        'imagenValida': imageFile == null ? "false" : "true",
       };
 
       final result = await _storage.saveData("characters.json", data);
@@ -84,15 +107,23 @@ class _NewCardViewState extends State<NewCardView> {
           ),
           title: const Text("Crea una nueva carta"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
             child: Center(
               child: Form(
                 key: _formKey,
                 child: Column(
                   spacing: 20,
                   children: [
+                    GestureDetector(
+                      child: MainPhotoFrame(future: _future),
+                      onTap: () {
+                        setState(() {
+                          _future = futureFile();
+                        });
+                      },
+                    ),
                     TextFormField(
                       controller: _controladorNombre,
                       decoration: const InputDecoration(labelText: "Nombre"),

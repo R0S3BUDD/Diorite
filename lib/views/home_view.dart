@@ -2,6 +2,7 @@ import 'package:diorite/core/local_storage_service.dart';
 import 'package:diorite/views/new_card_view.dart';
 import 'package:diorite/components/char_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -181,11 +182,20 @@ class _HomeViewState extends State<HomeView> {
               }
               //si hay cartas, mostrarlas:
               return SingleChildScrollView(
-                child: Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  alignment: WrapAlignment.start,
-                  children: cards,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MasonryGridView.count(
+                    crossAxisCount:
+                        2, // número de columnas, Esto debería ser editable
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: cards.length,
+                    itemBuilder: (context, index) {
+                      return cards[index];
+                    },
+                  ),
                 ),
               );
             },

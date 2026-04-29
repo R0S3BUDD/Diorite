@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
 
 class LocalStorageService {
   //Se crea una única instancia de LocalStorageService usando un constructor privado
@@ -33,7 +34,7 @@ class LocalStorageService {
   }
 
   String _getFilePath(String fileName) {
-    return path.join(_appDirectory.path, fileName);
+    return path.join(_appDirectory.path, "CharCardFiles/$fileName");
   }
 
   Future<bool> saveData(String fileName, dynamic data) async {
@@ -75,6 +76,50 @@ class LocalStorageService {
       await file.writeAsString("[]");
       print("ERROR AL LEER: $e");
       return [];
+    }
+  }
+
+  Future<String?> createThumbnail(File originalFile) async {
+    try {
+      await init();
+
+      // Leer bytes
+      final bytes = await originalFile.readAsBytes();
+
+      // Decodificar imagen
+      final image = img.decodeImage(bytes);
+      if (image == null) return null;
+
+      // Redimensionar (puedes ajustar el tamaño)
+      final thumbnail = img.copyResize(
+        image,
+        width: 150, // tamaño típico de thumbnail
+      );
+
+      // Construir nombre nuevo
+      final originalName = path.basenameWithoutExtension(originalFile.path);
+      final extension = path.extension(originalFile.path);
+
+      final thumbName = "${originalName}_thumb$extension";
+
+      // Guardar en el directorio de la app
+      final thumbPath = path.join(
+        _appDirectory.path,
+        "CharCardFiles",
+        thumbName,
+      );
+
+      final thumbFile = File(thumbPath);
+
+      // Codificar y guardar
+      final encoded = img.encodeJpg(thumbnail, quality: 75);
+
+      await thumbFile.writeAsBytes(encoded);
+
+      return thumbFile.path;
+    } catch (e) {
+      print("ERROR AL CREAR THUMBNAIL: $e");
+      return null;
     }
   }
 }
