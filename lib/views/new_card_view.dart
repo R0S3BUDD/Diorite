@@ -9,7 +9,10 @@ import 'package:flutter/material.dart';
 enum SaveResult { success, failure, aborted }
 
 class NewCardView extends StatefulWidget {
-  const NewCardView({super.key});
+  final Map<String, dynamic>? previousInfo;
+  final int? cardIndex;
+
+  const NewCardView({super.key, this.previousInfo, this.cardIndex});
 
   @override
   State<NewCardView> createState() => _NewCardViewState();
@@ -32,6 +35,27 @@ class _NewCardViewState extends State<NewCardView> {
   bool _isSaving = false;
   Future<File?>? _future;
   File? imageFile;
+  bool get isEditing => widget.previousInfo != null && widget.cardIndex != null;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.previousInfo != null) {
+      final data = widget.previousInfo!;
+
+      _controladorNombre.text = data['nombre'] ?? "";
+      _controladorEdad.text = data['edad'] ?? "";
+      _controladorNacionalidad.text = data['nacionalidad'] ?? "";
+      _controladorPersonalidad.text = data['personalidad'] ?? "";
+      _controladorHistoria.text = data['historia'] ?? "";
+
+      if (data['imagenPrincipal'] != null && data['imagenPrincipal'] != "") {
+        imageFile = File(data['imagenPrincipal']);
+        _future = Future.value(imageFile);
+      }
+    }
+  }
 
   Future<File?> futureFile() async {
     try {
@@ -75,9 +99,17 @@ class _NewCardViewState extends State<NewCardView> {
         'imagenValida': imageFile == null ? "false" : "true",
       };
 
-      final result = await _storage.saveData("characters.json", data);
-
-      return result ? SaveResult.success : SaveResult.failure;
+      if (isEditing) {
+        final result = await _storage.updateEntry(
+          "characters.json",
+          widget.cardIndex!,
+          data,
+        );
+        return result ? SaveResult.success : SaveResult.failure;
+      } else {
+        final result = await _storage.saveData("characters.json", data);
+        return result ? SaveResult.success : SaveResult.failure;
+      }
     } catch (_) {
       return SaveResult.failure;
     } finally {
@@ -105,7 +137,7 @@ class _NewCardViewState extends State<NewCardView> {
             },
             icon: const Icon(Icons.arrow_back),
           ),
-          title: const Text("Crea una nueva carta"),
+          title: isEditing ? Text("Editar personaje") : Text("Crear Personaje"),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -176,7 +208,9 @@ class _NewCardViewState extends State<NewCardView> {
                     },
               child: _isSaving
                   ? const CircularProgressIndicator()
-                  : const Text("Agregar Personaje"),
+                  : isEditing
+                  ? Text("Guardar Cambios")
+                  : Text("Guardar Personaje"),
             ),
           ),
         ),

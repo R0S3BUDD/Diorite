@@ -1,5 +1,6 @@
 import 'package:diorite/core/local_storage_service.dart';
 import 'package:diorite/core/look_n_feel.dart';
+import 'package:diorite/views/char_info_view.dart';
 import 'package:diorite/views/new_card_view.dart';
 import 'package:diorite/components/char_card.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +37,10 @@ class _HomeViewState extends State<HomeView> {
           .readData("characters.json");
 
       if (characters.isNotEmpty) {
-        List<CharCard> charactersList = characters
-            .map(
-              (item) => CharCard(info: item),
-            ) //Por cada item(map) dentro de la lista, retorna CharCard
-            .toList();
+        List<CharCard> charactersList = List.generate(
+          characters.length,
+          (index) => CharCard(info: characters[index], selfIndex: index),
+        );
         return charactersList;
       } else {
         return [];
@@ -195,7 +195,37 @@ class _HomeViewState extends State<HomeView> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: cards.length,
                     itemBuilder: (context, index) {
-                      return cards[index];
+                      return GestureDetector(
+                        onTap: () async {
+                          var result = await Navigator.push<ActionPerformed>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CharInfoView(
+                                info: cards[index].info,
+                                selfIndex: index,
+                              ),
+                            ),
+                          );
+
+                          switch (result) {
+                            case ActionPerformed.Deleted:
+                              _refreshCharacters();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Carta Borrada")),
+                              );
+
+                              break;
+                            case null:
+                            case ActionPerformed.None:
+                              DoNothingAction();
+                              break;
+                            case ActionPerformed.Edited:
+                              _refreshCharacters();
+                              break;
+                          }
+                        },
+                        child: cards[index],
+                      );
                     },
                   ),
                 ),

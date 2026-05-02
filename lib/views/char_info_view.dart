@@ -1,17 +1,34 @@
 import 'dart:io';
 
+import 'package:diorite/core/local_storage_service.dart';
 import 'package:diorite/core/look_n_feel.dart';
+import 'package:diorite/views/new_card_view.dart';
 import 'package:flutter/material.dart';
+
+enum ActionPerformed { None, Deleted, Edited }
 
 class CharInfoView extends StatefulWidget {
   final Map<String, dynamic> info;
-  const CharInfoView({super.key, required this.info});
+  final int selfIndex;
+  const CharInfoView({super.key, required this.info, required this.selfIndex});
 
   @override
   State<CharInfoView> createState() => _CharInfoViewState();
 }
 
 class _CharInfoViewState extends State<CharInfoView> {
+  final _storage = LocalStorageService();
+  Map<String, dynamic> get info => newInfo == null ? widget.info : newInfo!;
+  Map<String, dynamic>? newInfo;
+  bool edited = false;
+
+  void _refreshView() async {
+    newInfo = await _storage.getEntryAt("characters.json", widget.selfIndex);
+    setState(() {
+      edited = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var look = LookNFeel(context);
@@ -19,16 +36,55 @@ class _CharInfoViewState extends State<CharInfoView> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(
+              context,
+              edited ? ActionPerformed.Edited : ActionPerformed.None,
+            );
           },
           icon: const Icon(Icons.arrow_back),
         ),
-        title: Text(widget.info["nombre"]),
+        title: Text(info["nombre"]),
         actions: [
           PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == "remove") {
+                await _storage.deleteEntry("characters.json", widget.selfIndex);
+                Navigator.pop(context, ActionPerformed.Deleted);
+              }
+              if (value == "edit") {
+                final result = await Navigator.push<SaveResult>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewCardView(
+                      previousInfo: widget.info,
+                      cardIndex: widget.selfIndex,
+                    ),
+                  ),
+                );
+
+                switch (result) {
+                  case SaveResult.success:
+                    _refreshView();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Personaje Editado")),
+                    );
+                    break;
+                  case SaveResult.failure:
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Ups... Algo salió mal")),
+                    );
+                    break;
+                  case SaveResult.aborted:
+                    DoNothingAction();
+                    break;
+                  default:
+                    DoNothingAction();
+                }
+              }
+            },
             itemBuilder: (context) => [
-              const PopupMenuItem(child: Text("Eliminar")),
-              const PopupMenuItem(child: Text("Editar")),
+              const PopupMenuItem(value: "remove", child: Text("Eliminar")),
+              const PopupMenuItem(value: "edit", child: Text("Editar")),
             ],
           ),
         ],
@@ -48,7 +104,7 @@ class _CharInfoViewState extends State<CharInfoView> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Image.file(
-                      File(widget.info["imagenPrincipal"]),
+                      File(info["imagenPrincipal"]),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -58,11 +114,8 @@ class _CharInfoViewState extends State<CharInfoView> {
                   child: Center(
                     child: Column(
                       children: [
-                        Text(widget.info["nombre"], style: look.mainTitle),
-                        Text(
-                          "Edad: ${widget.info["edad"]}",
-                          style: look.subtitle,
-                        ),
+                        Text(info["nombre"], style: look.mainTitle),
+                        Text("Edad: ${info["edad"]}", style: look.subtitle),
                       ],
                     ),
                   ),
@@ -78,7 +131,7 @@ class _CharInfoViewState extends State<CharInfoView> {
                       ),
                       children: [
                         TextSpan(
-                          text: widget.info["nacionalidad"],
+                          text: info["nacionalidad"],
                           style: look.subtitle.copyWith(
                             fontWeight: FontWeight.normal,
                           ),
@@ -101,7 +154,7 @@ class _CharInfoViewState extends State<CharInfoView> {
                           ),
                         ),
                         Text(
-                          widget.info["personalidad"],
+                          info["personalidad"],
                           textAlign: TextAlign.center,
                           style: look.multilineText,
                         ),
@@ -123,7 +176,7 @@ class _CharInfoViewState extends State<CharInfoView> {
                           ),
                         ),
                         Text(
-                          widget.info["historia"],
+                          info["historia"],
                           textAlign: TextAlign.center,
                           style: look.multilineText,
                         ),

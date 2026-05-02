@@ -40,12 +40,16 @@ class LocalStorageService {
   Future<bool> saveData(String fileName, dynamic data) async {
     try {
       await init();
-      final file = File(_getFilePath(fileName));
-      var currentData = await readData(fileName);
-      currentData.add(data);
-      final jsonString = jsonEncode(currentData).toString();
-      await file.writeAsString(jsonString);
-      return true;
+      final file = File(_getFilePath(fileName)); //carga el archivo
+      var currentData = await readData(fileName); //obtenemos la lista actual
+      currentData.add(data); //añadimos la nueva entrada
+      final jsonString = jsonEncode(
+        currentData,
+      ).toString(); //codifica la lista a json, y convierte en sting
+      await file.writeAsString(
+        jsonString,
+      ); //Escribe la nueva lista en el archivo
+      return true; //listo!
     } catch (e) {
       //TODO: Implementar logger
       print("ERROR AL GUARDAR $e");
@@ -53,27 +57,75 @@ class LocalStorageService {
     }
   }
 
+  Future<bool> deleteEntry(String fileName, int index) async {
+    try {
+      await init();
+      final file = File(_getFilePath(fileName));
+      var currentData = await readData(fileName);
+      currentData.removeAt(index);
+      final jsonString = jsonEncode(currentData).toString();
+      await file.writeAsString(jsonString);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateEntry(
+    String fileName,
+    int index,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      await init();
+      final file = File(_getFilePath(fileName));
+      var currentData = await readData(fileName);
+      currentData[index] = data;
+      final jsonString = jsonEncode(currentData).toString();
+      await file.writeAsString(jsonString);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>> getEntryAt(String fileName, int index) async {
+    try {
+      await init();
+      var currentData = await readData(fileName);
+      return currentData[index];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<List<Map<String, dynamic>>> readData(String fileName) async {
     await init();
-    final file = File(_getFilePath(fileName));
+    final file = File(_getFilePath(fileName)); //carga el archivo
 
     if (!await file.exists()) {
-      await file.create(recursive: true);
-      await file.writeAsString("[]");
+      //No existe??
+      await file.create(recursive: true); //Créalo
+      await file.writeAsString("[]"); //formatea
     }
 
-    final jsonString = await file.readAsString();
+    final jsonString = await file.readAsString(); //léelo
 
     if (jsonString.isEmpty) {
+      //¿Este caso puede pasar?
       return [];
     }
 
     try {
-      return (jsonDecode(jsonString) as List)
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
+      return (jsonDecode(jsonString)
+              as List) //Decodifica el formato json, importa como lista
+          .map(
+            (e) => Map<String, dynamic>.from(e),
+          ) //Toma cada elemento de la lista e interpreta como map
+          .toList(); //Transforma todo en una lista
     } catch (e) {
-      await file.writeAsString("[]");
+      //algo salió mal?
+      await file.writeAsString("[]"); //reinicia la lista
       print("ERROR AL LEER: $e");
       return [];
     }

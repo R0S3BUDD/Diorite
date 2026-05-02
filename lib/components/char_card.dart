@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:diorite/components/image_placeholder.dart';
-import 'package:diorite/views/char_info_view.dart';
 import 'package:flutter/material.dart';
 
 class CharCard extends StatelessWidget {
   final Map<String, dynamic> info;
+  final int selfIndex;
 
-  const CharCard({super.key, required this.info});
+  const CharCard({super.key, required this.info, required this.selfIndex});
 
   bool get hasImage =>
       info.isNotEmpty &&
@@ -16,43 +16,35 @@ class CharCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CharInfoView(info: info)),
-        );
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadiusGeometry.circular(12),
-        child: Stack(
-          children: [
-            hasImage
-                ? Center(
-                    child: Image.file(
-                      File(info["miniaturaImagen"]),
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : const ImagePlaceholder(),
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.transparent,
-                      Colors.transparent,
-                      Colors.black54,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+    return ClipRRect(
+      borderRadius: BorderRadiusGeometry.circular(12),
+      child: Stack(
+        children: [
+          hasImage
+              ? Center(
+                  child: Image.file(
+                    File(info["miniaturaImagen"]),
+                    fit: BoxFit.cover,
                   ),
+                )
+              : const ImagePlaceholder(),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.transparent,
+                    Colors.transparent,
+                    Colors.black54,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
             ),
-            Positioned(bottom: 8, left: 8, right: 8, child: _buildInfo()),
-          ],
-        ),
+          ),
+          Positioned(bottom: 8, left: 8, right: 8, child: _buildInfo()),
+        ],
       ),
     );
   }
