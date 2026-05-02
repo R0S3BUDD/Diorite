@@ -16,6 +16,8 @@ dependencies:
   image: ^4.1.3
   flutter_staggered_grid_view: ^0.7.0
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -23,3 +25,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: ChironGoRoundTC
+      fonts:
+        - asset: lib/assets/Chiron.ttf
+    - family: Kalam
+      fonts:
+        - asset: lib/assets/Kalam-Regular.ttf
+        - asset: lib/assets/Kalam-Bold.ttf
+          weight: 700
+        - asset: lib/assets/Kalam-Light.ttf
+          weight: 200

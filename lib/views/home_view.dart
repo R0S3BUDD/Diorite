@@ -1,4 +1,5 @@
 import 'package:diorite/core/local_storage_service.dart';
+import 'package:diorite/core/look_n_feel.dart';
 import 'package:diorite/views/new_card_view.dart';
 import 'package:diorite/components/char_card.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    var look = LookNFeel(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -185,8 +188,7 @@ class _HomeViewState extends State<HomeView> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MasonryGridView.count(
-                    crossAxisCount:
-                        2, // número de columnas, Esto debería ser editable
+                    crossAxisCount: (look.viewWidth / 150).floor(),
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
                     shrinkWrap: true,

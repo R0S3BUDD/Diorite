@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:diorite/components/image_placeholder.dart';
+import 'package:diorite/views/char_info_view.dart';
 import 'package:flutter/material.dart';
 
 class CharCard extends StatelessWidget {
@@ -15,14 +16,24 @@ class CharCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadiusGeometry.circular(12),
-      child: SizedBox(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CharInfoView(info: info)),
+        );
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadiusGeometry.circular(12),
         child: Stack(
           children: [
-            //imagen ó placeholder
             hasImage
-                ? Positioned(child: Image.file(File(info["miniaturaImagen"])))
+                ? Center(
+                    child: Image.file(
+                      File(info["miniaturaImagen"]),
+                      fit: BoxFit.cover,
+                    ),
+                  )
                 : const ImagePlaceholder(),
             Positioned.fill(
               child: Container(
