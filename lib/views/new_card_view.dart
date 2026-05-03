@@ -139,54 +139,56 @@ class _NewCardViewState extends State<NewCardView> {
           ),
           title: isEditing ? Text("Editar personaje") : Text("Crear Personaje"),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  spacing: 20,
-                  children: [
-                    GestureDetector(
-                      child: MainPhotoFrame(future: _future),
-                      onTap: () {
-                        setState(() {
-                          _future = futureFile();
-                        });
-                      },
-                    ),
-                    TextFormField(
-                      controller: _controladorNombre,
-                      decoration: const InputDecoration(labelText: "Nombre"),
-                      validator: (value) => value == null || value.isEmpty
-                          ? "Campo requerido"
-                          : null,
-                    ),
-                    TextFormField(
-                      controller: _controladorEdad,
-                      decoration: const InputDecoration(labelText: "Edad"),
-                      validator: (value) => value == null || value.isEmpty
-                          ? "Campo requerido"
-                          : null,
-                    ),
-                    TextFormField(
-                      controller: _controladorNacionalidad,
-                      decoration: const InputDecoration(
-                        labelText: "Nacionalidad",
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    spacing: 20,
+                    children: [
+                      GestureDetector(
+                        child: MainPhotoFrame(future: _future),
+                        onTap: () {
+                          setState(() {
+                            _future = futureFile();
+                          });
+                        },
                       ),
-                    ),
-                    TextArea(
-                      "Personalidad",
-                      controller: _controladorPersonalidad,
-                    ),
-                    TextArea("Historia", controller: _controladorHistoria),
-                    TextButton.icon(
-                      icon: const Icon(Icons.add_a_photo),
-                      onPressed: () {},
-                      label: const Text("Añade una foto"),
-                    ),
-                  ],
+                      TextFormField(
+                        controller: _controladorNombre,
+                        decoration: const InputDecoration(labelText: "Nombre"),
+                        validator: (value) => value == null || value.isEmpty
+                            ? "Campo requerido"
+                            : null,
+                      ),
+                      TextFormField(
+                        controller: _controladorEdad,
+                        decoration: const InputDecoration(labelText: "Edad"),
+                        validator: (value) => value == null || value.isEmpty
+                            ? "Campo requerido"
+                            : null,
+                      ),
+                      TextFormField(
+                        controller: _controladorNacionalidad,
+                        decoration: const InputDecoration(
+                          labelText: "Nacionalidad",
+                        ),
+                      ),
+                      TextArea(
+                        "Personalidad",
+                        controller: _controladorPersonalidad,
+                      ),
+                      TextArea("Historia", controller: _controladorHistoria),
+                      TextButton.icon(
+                        icon: const Icon(Icons.add_a_photo),
+                        onPressed: () {},
+                        label: const Text("Añade una foto"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -121,35 +121,37 @@ class _HomeViewState extends State<HomeView> {
               //Estado: Error
               if (snapshot.hasError) {
                 print(snapshot.error);
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.error_outline,
-                        size: 48,
-                        color: Colors.blue,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Error al cargar las cartas',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                return SafeArea(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 48,
+                          color: Colors.blue,
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        snapshot.error.toString(),
-                        style: const TextStyle(fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: _refreshCharacters,
-                        child: const Text("Reintentar"),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        Text(
+                          'Error al cargar las cartas',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          snapshot.error.toString(),
+                          style: const TextStyle(fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _refreshCharacters,
+                          child: const Text("Reintentar"),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }

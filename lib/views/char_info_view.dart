@@ -89,102 +89,104 @@ class _CharInfoViewState extends State<CharInfoView> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              spacing: 12,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: look.viewHeight * 0.55,
-                    minWidth: look.viewWidth,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: Image.file(
-                      File(info["imagenPrincipal"]),
-                      fit: BoxFit.cover,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                spacing: 12,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: look.viewHeight * 0.55,
+                      minWidth: look.viewWidth,
                     ),
-                  ),
-                ),
-                Container(
-                  decoration: look.infoContainer,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Text(info["nombre"], style: look.mainTitle),
-                        Text("Edad: ${info["edad"]}", style: look.subtitle),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: look.infoContainer,
-                  padding: EdgeInsets.all(8),
-                  child: Text.rich(
-                    TextSpan(
-                      text: "Nacionalidad: ",
-                      style: look.subtitle.copyWith(
-                        fontWeight: FontWeight.bold,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.file(
+                        File(info["imagenPrincipal"]),
+                        fit: BoxFit.cover,
                       ),
-                      children: [
-                        TextSpan(
-                          text: info["nacionalidad"],
-                          style: look.subtitle.copyWith(
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
-                ),
-                Container(
-                  decoration: look.infoContainer,
-                  padding: EdgeInsets.all(8),
-                  child: Center(
-                    child: Column(
-                      spacing: 8,
-                      children: [
-                        Text(
-                          "Personalidad",
-                          style: look.subtitle.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          info["personalidad"],
-                          textAlign: TextAlign.center,
-                          style: look.multilineText,
-                        ),
-                      ],
+                  Container(
+                    decoration: look.infoContainer,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(info["nombre"], style: look.mainTitle),
+                          Text("Edad: ${info["edad"]}", style: look.subtitle),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  decoration: look.infoContainer,
-                  padding: EdgeInsets.all(8),
-                  child: Center(
-                    child: Column(
-                      spacing: 8,
-                      children: [
-                        Text(
-                          "Historia",
-                          style: look.subtitle.copyWith(
-                            fontWeight: FontWeight.bold,
+                  Container(
+                    decoration: look.infoContainer,
+                    padding: EdgeInsets.all(8),
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Nacionalidad: ",
+                        style: look.subtitle.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: info["nacionalidad"],
+                            style: look.subtitle.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                        ),
-                        Text(
-                          info["historia"],
-                          textAlign: TextAlign.center,
-                          style: look.multilineText,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    decoration: look.infoContainer,
+                    padding: EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        spacing: 8,
+                        children: [
+                          Text(
+                            "Personalidad",
+                            style: look.subtitle.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            info["personalidad"],
+                            textAlign: TextAlign.center,
+                            style: look.multilineText,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: look.infoContainer,
+                    padding: EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        spacing: 8,
+                        children: [
+                          Text(
+                            "Historia",
+                            style: look.subtitle.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            info["historia"],
+                            textAlign: TextAlign.center,
+                            style: look.multilineText,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
