@@ -62,6 +62,8 @@ class LocalStorageService {
       await init();
       final file = File(_getFilePath(fileName));
       var currentData = await readData(fileName);
+      final thumb = File(currentData[index]["miniaturaImagen"]);
+      await thumb.delete();
       currentData.removeAt(index);
       final jsonString = jsonEncode(currentData).toString();
       await file.writeAsString(jsonString);
@@ -145,7 +147,7 @@ class LocalStorageService {
       // Redimensionar (puedes ajustar el tamaño)
       final thumbnail = img.copyResize(
         image,
-        width: 150, // tamaño típico de thumbnail
+        width: 250, // tamaño típico de thumbnail
       );
 
       // Construir nombre nuevo

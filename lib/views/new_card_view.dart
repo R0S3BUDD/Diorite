@@ -194,25 +194,28 @@ class _NewCardViewState extends State<NewCardView> {
             ),
           ),
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _isSaving
-                  ? null
-                  : () async {
-                      final result = await _saveChar();
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isSaving
+                    ? null
+                    : () async {
+                        final result = await _saveChar();
 
-                      if (!mounted) return;
+                        if (!mounted) return;
 
-                      Navigator.pop(context, result);
-                    },
-              child: _isSaving
-                  ? const CircularProgressIndicator()
-                  : isEditing
-                  ? Text("Guardar Cambios")
-                  : Text("Guardar Personaje"),
+                        Navigator.pop(context, result);
+                      },
+                child: _isSaving
+                    ? const CircularProgressIndicator()
+                    : isEditing
+                    ? Text("Guardar Cambios")
+                    : Text("Guardar Personaje"),
+              ),
             ),
           ),
         ),
