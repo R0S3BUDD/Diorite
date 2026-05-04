@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:diorite/components/galery_container.dart';
 import 'package:diorite/components/main_photo_frame.dart';
 import 'package:diorite/components/text_area.dart';
 import 'package:diorite/core/image_picker_service.dart';
@@ -33,9 +34,10 @@ class _NewCardViewState extends State<NewCardView> {
   final ImagePickerService _imagePicker = ImagePickerService();
 
   bool _isSaving = false;
-  Future<File?>? _future;
+  Future<File?>? _futureMainImage;
   File? imageFile;
   bool get isEditing => widget.previousInfo != null && widget.cardIndex != null;
+  List<String> gallery = [];
 
   @override
   void initState() {
@@ -52,7 +54,12 @@ class _NewCardViewState extends State<NewCardView> {
 
       if (data['imagenPrincipal'] != null && data['imagenPrincipal'] != "") {
         imageFile = File(data['imagenPrincipal']);
-        _future = Future.value(imageFile);
+        _futureMainImage = Future.value(imageFile);
+      }
+
+      if (data['galeria'] != null && data['galeria'] != []) {
+        gallery = data['galeria'];
+        //renderizar();
       }
     }
   }
@@ -75,6 +82,7 @@ class _NewCardViewState extends State<NewCardView> {
     _controladorNacionalidad.dispose();
     _controladorPersonalidad.dispose();
     imageFile = null;
+    gallery = [];
     super.dispose();
   }
 
@@ -97,6 +105,7 @@ class _NewCardViewState extends State<NewCardView> {
             ? await _storage.createThumbnail(imageFile!)
             : "",
         'imagenValida': imageFile == null ? "false" : "true",
+        'galeria': gallery,
       };
 
       if (isEditing) {
@@ -120,6 +129,7 @@ class _NewCardViewState extends State<NewCardView> {
   }
 
   Future<bool> _onWillPop() async {
+    //This Might be deprecated
     // Aquí puedes agregar lógica más compleja (ej: confirmar si hay cambios)
     Navigator.pop(context, SaveResult.aborted);
     return false; // evita el pop automático
@@ -150,10 +160,10 @@ class _NewCardViewState extends State<NewCardView> {
                     spacing: 20,
                     children: [
                       GestureDetector(
-                        child: MainPhotoFrame(future: _future),
+                        child: MainPhotoFrame(future: _futureMainImage),
                         onTap: () {
                           setState(() {
-                            _future = futureFile();
+                            _futureMainImage = futureFile();
                           });
                         },
                       ),
@@ -184,9 +194,17 @@ class _NewCardViewState extends State<NewCardView> {
                       TextArea("Historia", controller: _controladorHistoria),
                       TextButton.icon(
                         icon: const Icon(Icons.add_a_photo),
-                        onPressed: () {},
+                        onPressed: () async {
+                          File? img = await futureFile();
+                          if (img != null) {
+                            setState(() {
+                              gallery.add(img.path);
+                            });
+                          }
+                        },
                         label: const Text("Añade una foto"),
                       ),
+                      GaleryContainer(paths: gallery),
                     ],
                   ),
                 ),

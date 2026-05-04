@@ -5,6 +5,6 @@ class ImagePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(Icons.person, size: 200, color: Colors.redAccent);
+    return Icon(Icons.person, size: 100, color: Colors.redAccent);
   }
 }

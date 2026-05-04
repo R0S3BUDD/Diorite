@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:diorite/components/galery_container.dart';
 import 'package:diorite/core/local_storage_service.dart';
 import 'package:diorite/core/look_n_feel.dart';
+import 'package:diorite/views/detailed_image_view.dart';
 import 'package:diorite/views/new_card_view.dart';
 import 'package:flutter/material.dart';
 
@@ -104,9 +106,19 @@ class _CharInfoViewState extends State<CharInfoView> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
-                      child: Image.file(
-                        File(info["imagenPrincipal"]),
-                        fit: BoxFit.cover,
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailedImageView(
+                              path: info['imagenPrincipal'],
+                            ),
+                          ),
+                        ),
+                        child: Image.file(
+                          File(info["imagenPrincipal"]),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -185,6 +197,7 @@ class _CharInfoViewState extends State<CharInfoView> {
                       ),
                     ),
                   ),
+                  GaleryContainer(paths: info['galeria']),
                 ],
               ),
             ),

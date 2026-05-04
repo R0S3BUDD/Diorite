@@ -22,4 +22,6 @@ class LookNFeel {
     borderRadius: BorderRadius.circular(12),
     color: Color.fromARGB(255, 208, 217, 221),
   );
+
+  BoxConstraints galeryItem = BoxConstraints(maxWidth: 100, maxHeight: 100);
 }
