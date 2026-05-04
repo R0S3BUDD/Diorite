@@ -37,7 +37,7 @@ class _NewCardViewState extends State<NewCardView> {
   Future<File?>? _futureMainImage;
   File? imageFile;
   bool get isEditing => widget.previousInfo != null && widget.cardIndex != null;
-  List<String> gallery = [];
+  List<dynamic> gallery = [];
 
   @override
   void initState() {
@@ -57,17 +57,15 @@ class _NewCardViewState extends State<NewCardView> {
         _futureMainImage = Future.value(imageFile);
       }
 
-      if (data['galeria'] != null && data['galeria'] != []) {
+      if (data['galeria'] != null && (data['galeria'] as List).isNotEmpty) {
         gallery = data['galeria'];
-        //renderizar();
       }
     }
   }
 
   Future<File?> futureFile() async {
     try {
-      imageFile = await _imagePicker.pickImage();
-      return imageFile;
+      return await _imagePicker.pickImage();
     } catch (e) {
       print("Error al elegir imagen: $e");
       return null;
@@ -161,10 +159,15 @@ class _NewCardViewState extends State<NewCardView> {
                     children: [
                       GestureDetector(
                         child: MainPhotoFrame(future: _futureMainImage),
-                        onTap: () {
-                          setState(() {
-                            _futureMainImage = futureFile();
-                          });
+                        onTap: () async {
+                          final file = await futureFile();
+
+                          if (file != null) {
+                            setState(() {
+                              imageFile = file;
+                              _futureMainImage = Future.value(file);
+                            });
+                          }
                         },
                       ),
                       TextFormField(
