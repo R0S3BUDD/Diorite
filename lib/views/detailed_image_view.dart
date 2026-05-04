@@ -13,7 +13,9 @@ class DetailedImageView extends StatelessWidget {
       backgroundColor: Colors.black,
       body: GestureDetector(
         onTap: () => Navigator.pop(context),
-        child: Center(child: Image.file(File(path), fit: BoxFit.fill)),
+        child: SafeArea(
+          child: Center(child: Image.file(File(path), fit: BoxFit.fill)),
+        ),
       ),
     );
   }

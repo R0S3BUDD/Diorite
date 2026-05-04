@@ -186,49 +186,51 @@ class _HomeViewState extends State<HomeView> {
                 );
               }
               //si hay cartas, mostrarlas:
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MasonryGridView.count(
-                    crossAxisCount: (look.viewWidth / 150).floor(),
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: cards.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          var result = await Navigator.push<ActionPerformed>(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CharInfoView(
-                                info: cards[index].info,
-                                selfIndex: index,
+              return SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MasonryGridView.count(
+                      crossAxisCount: (look.viewWidth / 150).floor(),
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: cards.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            var result = await Navigator.push<ActionPerformed>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CharInfoView(
+                                  info: cards[index].info,
+                                  selfIndex: index,
+                                ),
                               ),
-                            ),
-                          );
+                            );
 
-                          switch (result) {
-                            case ActionPerformed.Deleted:
-                              _refreshCharacters();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Carta Borrada")),
-                              );
+                            switch (result) {
+                              case ActionPerformed.Deleted:
+                                _refreshCharacters();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Carta Borrada")),
+                                );
 
-                              break;
-                            case null:
-                            case ActionPerformed.None:
-                              DoNothingAction();
-                              break;
-                            case ActionPerformed.Edited:
-                              _refreshCharacters();
-                              break;
-                          }
-                        },
-                        child: cards[index],
-                      );
-                    },
+                                break;
+                              case null:
+                              case ActionPerformed.None:
+                                DoNothingAction();
+                                break;
+                              case ActionPerformed.Edited:
+                                _refreshCharacters();
+                                break;
+                            }
+                          },
+                          child: cards[index],
+                        );
+                      },
+                    ),
                   ),
                 ),
               );
