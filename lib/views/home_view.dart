@@ -50,6 +50,40 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  void _newCard(BuildContext context) async {
+    final result = await Navigator.push<SaveResult>(
+      context,
+      MaterialPageRoute(builder: (context) => const NewCardView()),
+    );
+
+    if (!context.mounted) return;
+
+    switch (result) {
+      case SaveResult.success:
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("¡Carta Guardada!")));
+        _refreshCharacters();
+        break;
+
+      case SaveResult.failure:
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Ups... Algo salió mal.")));
+        break;
+
+      case SaveResult.aborted:
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("¿Te arrepentiste? ;-;")));
+        break;
+
+      case null:
+        // Esto cubre el caso en que la ruta se cierra sin enviar nada
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var look = LookNFeel(context);
@@ -57,46 +91,12 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            _refreshCharacters();
-          },
+          onPressed: _refreshCharacters,
           icon: const Icon(Icons.refresh),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push<SaveResult>(
-            context,
-            MaterialPageRoute(builder: (context) => const NewCardView()),
-          );
-
-          if (!context.mounted) return;
-
-          switch (result) {
-            case SaveResult.success:
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text("¡Carta Guardada!")));
-              _refreshCharacters();
-              break;
-
-            case SaveResult.failure:
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Ups... Algo salió mal.")),
-              );
-              break;
-
-            case SaveResult.aborted:
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("¿Te arrepentiste? ;-;")),
-              );
-              break;
-
-            case null:
-              // Esto cubre el caso en que la ruta se cierra sin enviar nada
-              break;
-          }
-        },
+        onPressed: () async => _newCard,
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<CharCard>>(

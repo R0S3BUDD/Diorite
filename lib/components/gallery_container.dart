@@ -1,11 +1,12 @@
-import 'package:diorite/components/galery_item.dart';
+import 'package:diorite/components/gallery_item.dart';
 import 'package:diorite/core/look_n_feel.dart';
 import 'package:flutter/material.dart';
 
 class GaleryContainer extends StatefulWidget {
   final List<dynamic> paths;
+  final Function? onRemove;
 
-  const GaleryContainer({super.key, required this.paths});
+  const GaleryContainer({super.key, required this.paths, this.onRemove});
 
   @override
   State<GaleryContainer> createState() => _GaleryContainerState();
@@ -22,7 +23,7 @@ class _GaleryContainerState extends State<GaleryContainer> {
         child: Wrap(
           spacing: 8,
           children: widget.paths.map((path) {
-            return GaleryItem(path: path);
+            return GaleryItem(path: path, onRemove: widget.onRemove);
           }).toList(),
         ),
       ),

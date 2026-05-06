@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:diorite/components/galery_container.dart';
+import 'package:diorite/components/gallery_container.dart';
 import 'package:diorite/components/main_photo_frame.dart';
 import 'package:diorite/components/text_area.dart';
 import 'package:diorite/core/image_picker_service.dart';
@@ -207,7 +207,14 @@ class _NewCardViewState extends State<NewCardView> {
                         },
                         label: const Text("Añade una foto"),
                       ),
-                      GaleryContainer(paths: gallery),
+                      GaleryContainer(
+                        paths: gallery,
+                        onRemove: (path) {
+                          setState(() {
+                            gallery.remove(path);
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),

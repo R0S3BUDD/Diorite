@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:diorite/components/galery_container.dart';
+import 'package:diorite/components/gallery_container.dart';
 import 'package:diorite/core/local_storage_service.dart';
 import 'package:diorite/core/look_n_feel.dart';
 import 'package:diorite/views/detailed_image_view.dart';

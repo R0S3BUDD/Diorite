@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 
 class GaleryItem extends StatelessWidget {
   final String path;
+  final Function? onRemove;
 
-  const GaleryItem({super.key, required this.path});
+  const GaleryItem({super.key, required this.path, this.onRemove});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class GaleryItem extends StatelessWidget {
             },
           ),
         ),
+        onLongPress: () => onRemove?.call(path),
         child: Image.file(File(path)),
       ),
     );
