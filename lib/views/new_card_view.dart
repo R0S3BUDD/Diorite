@@ -173,9 +173,6 @@ class _NewCardViewState extends State<NewCardView> {
                       TextFormField(
                         controller: _controladorNombre,
                         decoration: const InputDecoration(labelText: "Nombre"),
-                        validator: (value) => value == null || value.isEmpty
-                            ? "Campo requerido"
-                            : null,
                       ),
                       TextFormField(
                         controller: _controladorEdad,

@@ -1,0 +1,115 @@
+{
+
+  "@@locale": "en",
+
+  "cardSaved": "Card saved!",
+  "@cardSaved": {
+    "description": "Message shown when a character is successfully saved"
+  },
+
+  "cardDeleted": "Card deleted",
+  "@cardDeleted":{
+    "description": "Message shown when a character is deleted by the user"
+  },
+
+  "genericError": "Oops... Something went wrong.",
+  "@genericError": {
+    "description": "Generic error message"
+  },
+
+  "operationCancelled": "Character not saved",
+  "@operationCancelled": {
+    "description": "Message shown when character creation or editing is cancelled"
+  },
+
+  "imageLoadingError": "Error loading image",
+  "@imageLoadingError": {
+    "description": "Error shown when an image fails to load"
+  },
+
+  "addPhoto": "Add a photo",
+  "@addPhoto": {
+    "description": "Text for adding an image to the character"
+  },
+
+  "defaultInfoName": "Name",
+  "@defaultInfoName": {
+    "description": "Character name field"
+  },
+
+  "defaultInfoAge": "Age",
+  "@defaultInfoAge": {
+    "description": "Character age field"
+  },
+
+  "defaultInfoNationality": "Nationality",
+  "@defaultInfoNationality": {
+    "description": "Character nationality field"
+  },
+
+  "defaultInfoPersonality": "Personality",
+  "@defaultInfoPersonality": {
+    "description": "Character personality field"
+  },
+
+  "defaultInfoLore": "Backstory",
+  "@defaultInfoLore": {
+    "description": "Character backstory or lore field"
+  },
+
+  "characterAge": "Age: {age}",
+  "@characterAge": {
+    "description": "Text showing the character's current age",
+    "placeholders": {
+      "age": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+
+  "retry": "Retry",
+  "@retry": {
+    "description": "Button to retry a failed operation"
+  },
+
+  "homeLoadingCards": "Loading your cards",
+  "@homeLoadingCards": {
+    "description": "Message shown while characters are loading"
+  },
+
+  "homeCardsLoadingError": "Error loading cards",
+  "@homeCardsLoadingError": {
+    "description": "Message shown when an error occurs loading characters"
+  },
+
+  "homeNoCharacters": "No characters",
+  "@homeNoCharacters": {
+    "description": "Message shown when there are no saved characters"
+  },
+
+  "homeTapToAddCharacter": "Press the + button to add a character",
+  "@homeTapToAddCharacter": {
+    "description": "Message shown on an empty list to guide the user to create a character"
+  },
+
+  "newCardEditingTitle": "Edit character",
+  "@newCardEditingTitle": {
+    "description": "Screen title for editing an existing character"
+  },
+
+  "newCardCreatingTitle": "Create character",
+  "@newCardCreatingTitle": {
+    "description": "Screen title for creating a character"
+  },
+
+  "newCardSaveChanges": "Save changes",
+  "@newCardSaveChanges": {
+    "description": "Button to save changes to an existing character"
+  },
+
+  "newCardSaveCharacter": "Save character",
+  "@newCardSaveCharacter": {
+    "description": "Button to save a new character"
+  }
+}

@@ -5,6 +5,7 @@ import 'package:diorite/views/new_card_view.dart';
 import 'package:diorite/components/char_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:diorite/l10n/app_localizations.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -46,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
         return [];
       }
     } catch (e) {
-      throw Exception("Error al cargar characters.json: $e");
+      throw Exception("Error while loading characters.json: $e");
     }
   }
 
@@ -60,22 +61,24 @@ class _HomeViewState extends State<HomeView> {
 
     switch (result) {
       case SaveResult.success:
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("¡Carta Guardada!")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.cardSaved)),
+        );
         _refreshCharacters();
         break;
 
       case SaveResult.failure:
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Ups... Algo salió mal.")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.genericError)),
+        );
         break;
 
       case SaveResult.aborted:
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("¿Te arrepentiste? ;-;")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.operationCancelled),
+          ),
+        );
         break;
 
       case null:
@@ -87,6 +90,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     var look = LookNFeel(context);
+    var localizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => _newCard,
+        onPressed: () async => _newCard(context),
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<CharCard>>(
@@ -106,13 +110,13 @@ class _HomeViewState extends State<HomeView> {
             (BuildContext context, AsyncSnapshot<List<CharCard>> snapshot) {
               //Estado: Cargando
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
+                return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(),
                       SizedBox(height: 36),
-                      Text('Cargando tus Cartas'),
+                      Text(localizations!.homeLoadingCards),
                     ],
                   ),
                 );
@@ -133,7 +137,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Error al cargar las cartas',
+                          localizations!.homeCardsLoadingError,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -148,7 +152,7 @@ class _HomeViewState extends State<HomeView> {
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: _refreshCharacters,
-                          child: const Text("Reintentar"),
+                          child: Text(localizations.retry),
                         ),
                       ],
                     ),
@@ -168,7 +172,7 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.inbox, size: 80, color: Colors.grey[600]),
                       const SizedBox(height: 16),
                       Text(
-                        "No hay elementos",
+                        localizations!.homeNoCharacters,
                         style: const TextStyle(
                           fontSize: 18,
                           color: Color.fromARGB(255, 167, 143, 143),
@@ -177,7 +181,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        "Presiona el botón + para añadir una carta",
+                        localizations.homeTapToAddCharacter,
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                         textAlign: TextAlign.center,
                       ),
@@ -214,7 +218,9 @@ class _HomeViewState extends State<HomeView> {
                               case ActionPerformed.Deleted:
                                 _refreshCharacters();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Carta Borrada")),
+                                  SnackBar(
+                                    content: Text(localizations!.cardDeleted),
+                                  ),
                                 );
 
                                 break;

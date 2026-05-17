@@ -1,0 +1,114 @@
+{
+
+  "@@locale": "es",
+
+  "cardSaved": "¡Carta guardada!",
+  "@cardSaved": {
+    "description": "Mensaje mostrado cuando un personaje se guarda correctamente"
+  },
+  "cardDeleted": "Carta Borrada",
+  "@cardDeleted":{
+    "description": "Mensaje mostrado cuando un personaje es borrado por el usuario"
+  },
+
+  "genericError": "Ups... Algo salió mal.",
+  "@genericError": {
+    "description": "Mensaje genérico de error"
+  },
+
+  "operationCancelled": "Personaje no guardado",
+  "@operationCancelled": {
+    "description": "Mensaje mostrado cuando la creación o edición de un personaje es cancelada"
+  },
+
+  "imageLoadingError": "Error al cargar imagen",
+  "@imageLoadingError": {
+    "description": "Error mostrado cuando una imagen no puede cargarse"
+  },
+
+  "addPhoto": "Añade una foto",
+  "@addPhoto": {
+    "description": "Texto para añadir una imagen al personaje"
+  },
+
+  "defaultInfoName": "Nombre",
+  "@defaultInfoName": {
+    "description": "Campo de nombre del personaje"
+  },
+
+  "defaultInfoAge": "Edad",
+  "@defaultInfoAge": {
+    "description": "Campo de edad del personaje"
+  },
+
+  "defaultInfoNationality": "Nacionalidad",
+  "@defaultInfoNationality": {
+    "description": "Campo de nacionalidad del personaje"
+  },
+
+  "defaultInfoPersonality": "Personalidad",
+  "@defaultInfoPersonality": {
+    "description": "Campo de personalidad del personaje"
+  },
+
+  "defaultInfoLore": "Historia",
+  "@defaultInfoLore": {
+    "description": "Campo de historia o lore del personaje"
+  },
+
+  "characterAge": "Edad: {age}",
+  "@characterAge": {
+    "description": "Texto que muestra la edad actual del personaje",
+    "placeholders": {
+      "age": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+
+  "retry": "Reintentar",
+  "@retry": {
+    "description": "Botón para intentar nuevamente una operación fallida"
+  },
+
+  "homeLoadingCards": "Cargando tus cartas",
+  "@homeLoadingCards": {
+    "description": "Mensaje mostrado mientras se cargan los personajes"
+  },
+
+  "homeCardsLoadingError": "Error al cargar las cartas",
+  "@homeCardsLoadingError": {
+    "description": "Mensaje mostrado cuando ocurre un error cargando personajes"
+  },
+
+  "homeNoCharacters": "No hay personajes",
+  "@homeNoCharacters": {
+    "description": "Mensaje mostrado cuando no existen personajes guardados"
+  },
+
+  "homeTapToAddCharacter": "Presiona el botón + para añadir un personaje",
+  "@homeTapToAddCharacter": {
+    "description": "Mensaje mostrado en una lista vacía para guiar al usuario a crear un personaje"
+  },
+
+  "newCardEditingTitle": "Editar personaje",
+  "@newCardEditingTitle": {
+    "description": "Título de pantalla para editar un personaje existente"
+  },
+
+  "newCardCreatingTitle": "Crear personaje",
+  "@newCardCreatingTitle": {
+    "description": "Título de pantalla para crear un personaje"
+  },
+
+  "newCardSaveChanges": "Guardar cambios",
+  "@newCardSaveChanges": {
+    "description": "Botón para guardar cambios en un personaje existente"
+  },
+
+  "newCardSaveCharacter": "Guardar personaje",
+  "@newCardSaveCharacter": {
+    "description": "Botón para guardar un personaje nuevo"
+  }
+}
